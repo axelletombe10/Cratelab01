@@ -574,6 +574,8 @@
     </div>
     <div class="panel-label" data-i18n="profileChooseAvatar">Choose your avatar</div>
     <div class="avatar-picker" id="avatarPicker"></div>
+    <div class="panel-label" style="margin-top:20px;" data-i18n="tabStats">Stats</div>
+    <div id="statsContent"></div>
   </div>
 
   <div class="panel settings-panel" id="settingsPanel">
@@ -600,7 +602,6 @@
     <button class="tab" data-view="collection" data-i18n="tabCollection">Collection</button>
     <button class="tab" data-view="add" data-i18n="tabAdd">Add</button>
     <button class="tab" data-view="sets" data-i18n="tabSetlists">Setlists</button>
-    <button class="tab" data-view="stats" data-i18n="tabStats">Stats</button>
   </div>
 
   <div class="welcome-banner" id="welcomeBanner" style="display:none;"></div>
@@ -758,11 +759,6 @@
       </div>
     </div>
     <div id="setsList"></div>
-  </div>
-
-  <!-- ===== STATS VIEW ===== -->
-  <div class="view" id="view-stats">
-    <div id="statsContent"></div>
   </div>
 
 </div>
@@ -1330,7 +1326,6 @@
       document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
       tab.classList.add('active');
       document.getElementById('view-' + tab.dataset.view).classList.add('active');
-      if(tab.dataset.view === 'stats') renderStats();
       if(tab.dataset.view === 'sets') renderSets();
       if(tab.dataset.view === 'home') renderDotd();
       updateWelcomeBanner(tab.dataset.view);
@@ -1392,7 +1387,7 @@
   if(els.profileToggle){
     els.profileToggle.addEventListener('click', () => {
       els.profilePanel.classList.toggle('open');
-      if(els.profilePanel.classList.contains('open')) renderProfilePanel();
+      if(els.profilePanel.classList.contains('open')){ renderProfilePanel(); renderStats(); }
     });
   }
   const profileSecretToggleBtn = document.getElementById('profileSecretToggle');
@@ -1533,7 +1528,6 @@
   // ---- enrichissement progressif (récupère genres/styles/tracklist/pochette/vidéos disque par disque) ----
   let enrichRunning = false;
   let priceRunning = false;
-  let coverRunning = false;
   function updateEnrichUI(){
     const pending = library.filter(r => r.needsEnrichment);
     if(!pending.length){ els.enrichBlock.style.display = 'none'; return; }
@@ -1687,8 +1681,12 @@
     };
   }
 
-  const FUNCTION_TAGS = ['Peak-time','Driving','Hypnotic','Closing','Intro','Warm-up','Mid-set','Afterhours','Tool','Transition','Break','Ambient','Percussive','Chords/Pads','Acid','Straight','Sexy','Tension','Reset','Stable','Builder','Classic','Down','Up','Secret Weapon'];
-  // Teintes réparties régulièrement sur tout le cercle chromatique (360°/24 tags) pour que
+  const FUNCTION_TAGS = [
+    'Peak-time','Driving','Hypnotic','Closing','Intro','Warm-up','Mid-set','Afterhours','Tool','Transition','Break','Ambient','Percussive','Chords/Pads','Acid','Straight','Sexy','Tension','Reset','Stable','Builder','Classic','Down','Up','Secret Weapon',
+    // ↓ ex-styles/genres, déplacés ici lors de la réduction de la palette genres (moins d'items = couleurs plus distinctes)
+    'Acid House','Progressive House','Euro House','Garage House','Deep Techno','Tribal','Old School','Raw','Industrial','Acid Techno','Atmospheric','Schranz','Electro Swing','Big Beat','Broken Beat','Footwork','Bassline','Jersey Club','Speed Garage','Goa Trance','Hard Trance','Tech Trance','Speedcore','Jumpstyle','Dark Ambient','Drone','Chillwave','Noise','Witch House','Musique Concrète'
+  ];
+  // Teintes réparties régulièrement sur tout le cercle chromatique (360°/55 tags) pour que
   // chaque fonction reste visuellement distincte des autres, même dans une liste dense.
   function functionColor(tag){
     const idx = FUNCTION_TAGS.indexOf(tag);
@@ -1699,16 +1697,16 @@
   }
 
   // Teintes réparties régulièrement (360°/7 familles) pour un maximum de distinction entre
-  // familles de genres ; à l'intérieur d'une famille, luminosité ET saturation varient en
-  // alternance pour distinguer facilement les sous-genres, même dans les familles denses.
+  // familles de genres ; à l'intérieur d'une famille (réduite à 3-5 items max), luminosité ET
+  // saturation varient en alternance pour distinguer facilement chaque sous-genre.
   const GENRE_FAMILIES = {
-    'House': { hue: 206, items: ['House','Deep House','Tech House','Acid House','Progressive House','Euro House','Garage House','Disco / Nu-Disco'] },
-    'Techno': { hue: 0, items: ['Techno','Detroit','Dub Techno','Deep Techno','Hypnotic','Tribal','Old School','Minimal','Raw','Industrial','Acid Techno','Driving','Atmospheric','Hard Techno','Schranz'] },
-    'Electro': { hue: 257, items: ['Electro','Electro House','Electroclash','Electro Swing','Breakbeat','Big Beat','Broken Beat'] },
-    'Bass Music': { hue: 103, items: ['Drum & Bass','Jungle','Dubstep','UK Garage','Grime','Footwork','Bassline','Jersey Club','Speed Garage'] },
-    'Trance': { hue: 51, items: ['Trance','Psytrance','Goa Trance','Progressive Trance','Hard Trance','Tech Trance'] },
-    'Hardcore': { hue: 309, items: ['Hardcore','Hardstyle','Gabber','Happy Hardcore','Speedcore','Jumpstyle'] },
-    'Ambient / Experimental': { hue: 154, items: ['Ambient','IDM','Dark Ambient','Drone','Downtempo','Chillwave','Noise','Synthwave','Vaporwave','Witch House','Musique Concrète'] }
+    'House': { hue: 206, items: ['House','Deep House','Tech House','Disco / Nu-Disco'] },
+    'Techno': { hue: 0, items: ['Techno','Detroit','Dub Techno','Minimal','Hard Techno'] },
+    'Electro': { hue: 257, items: ['Electro','Electro House','Electroclash','Breakbeat'] },
+    'Bass Music': { hue: 103, items: ['Drum & Bass','Jungle','Dubstep','UK Garage','Grime'] },
+    'Trance': { hue: 51, items: ['Trance','Psytrance','Progressive Trance'] },
+    'Hardcore': { hue: 309, items: ['Hardcore','Hardstyle','Gabber','Happy Hardcore'] },
+    'Ambient / Experimental': { hue: 154, items: ['Ambient','IDM','Downtempo','Synthwave','Vaporwave'] }
   };
   function genreColor(tag){
     for(const [famName, fam] of Object.entries(GENRE_FAMILIES)){
@@ -3000,7 +2998,6 @@
     const priced = library.filter(r => r.priceLow != null && r.priceLow >= 0);
     const totalValue = priced.reduce((a,r) => a + Number(r.priceLow), 0);
     const missingPrices = library.filter(r => r.discogsId && r.priceLow == null).length;
-    const coverTargets = library.filter(r => r.discogsId).length;
 
     container.innerHTML = `
       <div class="stat-cards" style="margin-bottom:26px;">
@@ -3017,15 +3014,6 @@
         <div class="row">
           <button class="small" id="priceStartBtn" ${missingPrices === 0 ? 'disabled' : ''}>${t('updatePrices')}${missingPrices ? ' ('+missingPrices+' '+t('missing')+')' : ''}</button>
           <button class="ghost small" id="priceStopBtn" style="display:none;">${t('stop')}</button>
-        </div>
-      </div>
-      <div class="stat-block">
-        <h3>${t('coverQuality')}</h3>
-        <div class="modal-meta">${t('coverQualityHelp')}</div>
-        <div class="bar-track" style="margin:8px 0;"><div class="bar-fill" id="coverBar" style="width:0%;"></div></div>
-        <div class="row">
-          <button class="small" id="coverStartBtn" ${coverTargets === 0 ? 'disabled' : ''}>${t('updateCovers')}${coverTargets ? ' ('+coverTargets+')' : ''}</button>
-          <button class="ghost small" id="coverStopBtn" style="display:none;">${t('stop')}</button>
         </div>
       </div>
       <div class="stat-block">
@@ -3079,70 +3067,6 @@
         priceRunning = false;
         priceStopBtn.style.display = 'none';
         priceStartBtn.style.display = 'inline-block';
-      });
-    }
-
-    const coverStartBtn = document.getElementById('coverStartBtn');
-    const coverStopBtn = document.getElementById('coverStopBtn');
-    const coverBar = document.getElementById('coverBar');
-    if(coverStartBtn){
-      coverStartBtn.addEventListener('click', async () => {
-        coverRunning = true;
-        coverStartBtn.style.display = 'none';
-        coverStopBtn.style.display = 'inline-block';
-
-        // même limiteur de débit espacé + traitement en parallèle que pour l'enrichissement,
-        // pour rafraîchir rapidement les pochettes encore en basse résolution (anciennes fiches).
-        const ratePerMinute = settings.discogsToken ? 55 : 20;
-        const interval = 60000 / ratePerMinute;
-        const concurrency = settings.discogsToken ? 4 : 2;
-        let nextSlot = Date.now();
-        let schedulingChain = Promise.resolve();
-        function acquireSlot(){
-          schedulingChain = schedulingChain.then(() => {
-            const now = Date.now();
-            const wait = Math.max(0, nextSlot - now);
-            nextSlot = Math.max(now, nextSlot) + interval;
-            return wait > 0 ? new Promise(res => setTimeout(res, wait)) : undefined;
-          });
-          return schedulingChain;
-        }
-
-        const queue = library.map((r, i) => i).filter(i => library[i].discogsId);
-        const total = queue.length;
-        let done = 0, saveCounter = 0;
-
-        async function worker(){
-          while(coverRunning){
-            const idx = queue.shift();
-            if(idx === undefined) return;
-            await acquireSlot();
-            if(!coverRunning) return;
-            const r = library[idx];
-            try{
-              const json = await fetchDiscogs(r.discogsType === 'master' ? 'master' : 'release', r.discogsId);
-              const hd = bestImageUrl(json.images) || json.cover_image || json.thumb;
-              if(hd) library[idx].thumb = hd;
-            }catch(e){ /* on garde la pochette existante si la récupération échoue */ }
-            done++;
-            saveCounter++;
-            if(coverBar) coverBar.style.width = Math.round(done/total*100) + '%';
-            if(saveCounter % 5 === 0){ saveLibrary(); renderGrid(); }
-          }
-        }
-
-        await Promise.all(Array.from({ length: concurrency }, () => worker()));
-
-        saveLibrary();
-        coverRunning = false;
-        renderStats(); renderGrid();
-      });
-    }
-    if(coverStopBtn){
-      coverStopBtn.addEventListener('click', () => {
-        coverRunning = false;
-        coverStopBtn.style.display = 'none';
-        coverStartBtn.style.display = 'inline-block';
       });
     }
   }
