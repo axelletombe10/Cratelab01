@@ -165,24 +165,22 @@
   .view-mode-btn + .view-mode-btn{border-left:1px solid var(--line);}
   .view-mode-btn.active{background:var(--accent);color:#fff;}
 
-  /* ---- vue liste : références en horizontal avec lecteur par piste ---- */
-  .list-view{display:flex;flex-direction:column;gap:14px;}
-  .list-row{display:flex;gap:18px;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px;position:relative;}
+  /* ---- vue liste : références en horizontal, infos uniquement (clic → fiche détaillée) ---- */
+  .list-view{display:flex;flex-direction:column;gap:10px;}
+  .list-row{display:flex;align-items:center;gap:18px;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px 14px;position:relative;cursor:pointer;transition:border-color .12s;}
+  .list-row:hover{border-color:var(--accent-2);}
   .list-row.selected{border-color:var(--accent);}
   .list-check{position:absolute;top:12px;left:12px;width:16px;height:16px;accent-color:var(--accent);z-index:2;}
-  .list-thumb-wrap{flex:0 0 100px;width:100px;height:100px;cursor:pointer;}
+  .list-thumb-wrap{flex:0 0 64px;width:64px;height:64px;}
   .list-thumb-wrap img, .list-thumb-wrap .list-thumb{width:100%;height:100%;object-fit:cover;border-radius:4px;display:block;background:var(--bg) repeating-radial-gradient(circle at center, rgba(63,62,56,0.08) 0 2px, transparent 2px 6px);}
-  .list-info{flex:0 0 230px;min-width:0;cursor:pointer;padding-left:22px;}
+  .list-info{flex:1;min-width:0;padding-left:22px;}
   .list-info .artist{font-size:0.68rem;color:var(--ink-dim);text-transform:uppercase;letter-spacing:0.5px;}
   .list-info .title{font-family:'Archivo Black',sans-serif;font-size:1rem;color:var(--ink);margin-top:3px;line-height:1.15;}
   .list-info .meta{font-size:0.68rem;color:var(--ink-dim);margin-top:6px;}
   .list-info .chips{margin-top:8px;}
-  .list-tracks{flex:1;min-width:0;}
-  .list-tracks .runout-strip{margin-top:0;}
-  .list-empty-tracks{font-size:0.72rem;color:var(--ink-dim);align-self:center;}
   @media (max-width:760px){
-    .list-row{flex-direction:column;}
-    .list-info{flex:0 0 auto;padding-left:0;}
+    .list-row{flex-wrap:wrap;}
+    .list-info{flex:1 1 auto;padding-left:0;}
     .list-check{top:12px;left:auto;right:12px;}
   }
 
@@ -197,15 +195,18 @@
   .selection-bar{display:none;align-items:center;gap:12px;background:var(--surface-2);border:1px solid var(--accent-2);border-radius:4px;padding:10px 14px;margin-bottom:14px;font-size:0.72rem;flex-wrap:wrap;}
   .selection-bar.active{display:flex;}
 
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;}
-  .card{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:14px;cursor:pointer;transition:transform .12s, border-color .12s;}
+  .grid{display:grid;grid-template-columns:repeat(6, 1fr);gap:10px;}
+  @media (max-width:1000px){ .grid{grid-template-columns:repeat(4,1fr);} }
+  @media (max-width:760px){ .grid{grid-template-columns:repeat(3,1fr);} }
+  @media (max-width:520px){ .grid{grid-template-columns:repeat(2,1fr);} }
+  .card{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:9px;cursor:pointer;transition:transform .12s, border-color .12s;}
   .card:hover{transform:translateY(-2px);border-color:var(--accent-2);}
   .card.selected{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset;}
-  .card-check{position:absolute;top:10px;left:10px;width:16px;height:16px;accent-color:var(--accent);z-index:3;}
-  .card-thumb{width:100%;aspect-ratio:1;background:var(--bg) repeating-radial-gradient(circle at center, rgba(63,62,56,0.08) 0 2px, transparent 2px 6px);border-radius:2px;object-fit:cover;margin-bottom:10px;}
-  .card .artist{font-size:0.66rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent-2);}
-  .card .title{font-family:'Archivo Black',sans-serif;font-weight:700;font-size:1.25rem;line-height:1;margin:4px 0 6px;}
-  .card .meta{font-size:0.68rem;color:var(--ink-dim);}
+  .card-check{position:absolute;top:8px;left:8px;width:14px;height:14px;accent-color:var(--accent);z-index:3;}
+  .card-thumb{width:100%;aspect-ratio:1;background:var(--bg) repeating-radial-gradient(circle at center, rgba(63,62,56,0.08) 0 2px, transparent 2px 6px);border-radius:2px;object-fit:cover;margin-bottom:7px;}
+  .card .artist{font-size:0.56rem;letter-spacing:0.8px;text-transform:uppercase;color:var(--accent-2);}
+  .card .title{font-family:'Archivo Black',sans-serif;font-weight:700;font-size:0.86rem;line-height:1.12;margin:3px 0 4px;}
+  .card .meta{font-size:0.58rem;color:var(--ink-dim);}
   .chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;}
   .chip{font-size:0.6rem;letter-spacing:0.5px;text-transform:uppercase;background:var(--surface-2);color:var(--ink-dim);padding:3px 7px;border-radius:20px;border:1px solid var(--line);}
   .empty{color:var(--ink-dim);font-size:0.85rem;padding:40px 0;text-align:center;border:1px dashed var(--line);border-radius:4px;}
@@ -446,7 +447,7 @@
   .dotd-cover{width:100%;aspect-ratio:3/4;border-radius:4px;overflow:hidden;background:var(--bg) repeating-radial-gradient(circle at center, rgba(63,62,56,0.08) 0 2px, transparent 2px 6px);margin-bottom:14px;}
   .dotd-cover img{width:100%;height:100%;object-fit:cover;display:block;}
   .dotd-info .artist{font-size:0.7rem;letter-spacing:1px;text-transform:uppercase;color:var(--accent-2);}
-  .dotd-info .title{font-size:clamp(1.6rem,3.4vw,2.4rem);font-weight:700;line-height:1.05;color:var(--ink);margin-top:4px;}
+  .dotd-info .title{font-size:clamp(1.6rem,3.4vw,2.4rem);font-weight:700;line-height:1.15;color:var(--ink);margin-top:6px;text-transform:uppercase;letter-spacing:0.5px;}
   .dotd-empty{color:var(--ink-dim);font-size:0.85rem;padding:20px 0;text-align:center;border:1px dashed var(--line);border-radius:4px;}
 
   .selection-list{margin-top:8px;}
@@ -2682,9 +2683,7 @@
   // ---- vue liste : chaque référence en horizontal, avec un lecteur pour chacune de ses pistes ----
   function renderListView(filtered){
     els.grid.className = 'list-view';
-    els.grid.innerHTML = filtered.map(r => {
-      const idPrefix = 'list-' + String(r.id).replace(/[^a-zA-Z0-9_-]/g, '');
-      return `
+    els.grid.innerHTML = filtered.map(r => `
       <div class="list-row ${selectedIds.has(r.id)?'selected':''}" data-id="${r.id}">
         <input type="checkbox" class="list-check" ${selectedIds.has(r.id)?'checked':''}>
         <div class="list-thumb-wrap">
@@ -2693,34 +2692,25 @@
         <div class="list-info">
           <div class="artist">${escapeHtml(r.artist)}</div>
           <div class="title">${escapeHtml(r.title)}</div>
-          <div class="meta">${escapeHtml(r.year||'—')} · ${escapeHtml((r.labels||[]).join(', ')||'—')}${releaseBpmAvg(r)?' · '+releaseBpmAvg(r)+' BPM':''}</div>
+          <div class="meta">${escapeHtml(r.year||'—')} · ${escapeHtml((r.labels||[]).join(', ')||'—')}${releaseBpmAvg(r)?' · '+releaseBpmAvg(r)+' BPM':''}${(r.priceLow!=null && r.priceLow>=0)?' · ~'+r.priceLow+(r.priceCurrency==='EUR'?'€':' '+escapeHtml(r.priceCurrency)):''}</div>
           <div style="margin-top:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
             ${r.energy!=null ? energyBadgeHtml(r.energy) : ''}
             ${r.rating ? starsHtml(r.rating) : ''}
+            ${r.videos && r.videos.length ? `<span style="font-size:0.62rem;color:var(--ink-dim);">▶ ${r.videos.length}</span>` : ''}
           </div>
-          <div class="chips">${(r.styles||[]).slice(0,3).map(s=>`<span class="chip" style="border-color:${genreColor(s)};color:${genreColor(s)};">${escapeHtml(s)}</span>`).join('')}</div>
+          <div class="chips">${(r.styles||[]).slice(0,4).map(s=>`<span class="chip" style="border-color:${genreColor(s)};color:${genreColor(s)};">${escapeHtml(s)}</span>`).join('')}</div>
         </div>
-        <div class="list-tracks">
-          ${(r.videos && r.videos.length) ? videosSectionHtml(r.videos, idPrefix) : `<span class="list-empty-tracks">${t('noVideosListed')}</span>`}
-        </div>
-      </div>`;
-    }).join('');
+      </div>`).join('');
 
     els.grid.querySelectorAll('.list-row').forEach(row => {
       const id = row.getAttribute('data-id');
-      const r = library.find(x => x.id === id);
       row.querySelector('.list-check').addEventListener('click', (e) => {
         e.stopPropagation();
         if(selectedIds.has(id)) selectedIds.delete(id); else selectedIds.add(id);
         row.classList.toggle('selected');
         updateSelectionBar();
       });
-      row.querySelector('.list-thumb-wrap').addEventListener('click', () => openDetail(id));
-      row.querySelector('.list-info').addEventListener('click', () => openDetail(id));
-      if(r && r.videos && r.videos.length){
-        const idPrefix = 'list-' + String(id).replace(/[^a-zA-Z0-9_-]/g, '');
-        attachVideoThumbHandlers(row.querySelector('.list-tracks'), r.videos, idPrefix);
-      }
+      row.addEventListener('click', () => openDetail(id));
     });
     updateSelectionBar();
   }
