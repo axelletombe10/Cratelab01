@@ -894,7 +894,6 @@
     if(tip) tip.classList.remove('visible');
   }
   function hideAllSteps(){
-    hideHelpFloatIcon();
     lockEls.emailStep.style.display = 'none';
     lockEls.colorStep.style.display = 'none';
     lockEls.pinStep.style.display = 'none';
@@ -1063,19 +1062,20 @@
   document.getElementById('lockToggle').addEventListener('click', () => {
     document.getElementById('appRoot').style.display = 'none';
     lockEls.screen.style.display = 'flex';
+    showHelpFloatIcon();
     if(currentUser){
       authMode = 'unlock';
       goToColorStep(t('welcomeBack') + ' : ' + currentUser.pseudo);
     }else{
       hideAllSteps();
       lockEls.emailStep.style.display = 'block';
-      showHelpFloatIcon();
     }
   });
 
   // état initial au chargement de la page
   (function initLock(){
     const auth = getLocalAuth();
+    showHelpFloatIcon();
     if(auth){
       lockEls.pseudo.value = auth.pseudo;
       currentUser = { pseudo: auth.pseudo, docId: auth.docId, pinHash: auth.pinHash };
@@ -1084,7 +1084,6 @@
     }else{
       hideAllSteps();
       lockEls.emailStep.style.display = 'block';
-      showHelpFloatIcon();
     }
   })();
 
@@ -2591,11 +2590,11 @@
     { artist:'Yves Tumor', title:'Heaven Surrounds Us Like a Hood', youtubeUrl:'https://youtu.be/tsOi9znJmEo?si=9g8x93bwa0DsoAQJ' },
     { artist:'The Hacker', title:'Classic Revisited 1', youtubeUrl:'https://youtu.be/ojtxCU3dtlg?si=b_5QRmyqPGwwDFMD' },
     { artist:'Caro', title:'Only The Hurt', youtubeUrl:'https://youtu.be/-ysiA8aU5l0?si=dMoDguq-FwJuMZxF' },
-    { artist:'?', title:'(titre à confirmer)', youtubeUrl:'https://youtu.be/5l523eAC8xs?si=nA8IsmlgMdnCvhHi' },
-    { artist:'?', title:'(titre à confirmer)', youtubeUrl:'https://youtu.be/WcF8Aos4XDA?si=EB8GO63B0lX8Wi51' },
-    { artist:'?', title:'(titre à confirmer)', youtubeUrl:'https://youtu.be/DaGJvtGZ9Ns?si=94ADiUO6hkyp53d9' },
-    { artist:'?', title:'(titre à confirmer)', youtubeUrl:'https://youtu.be/bzhLamrxacE?si=k3xyOUmvgLRP5_b4' },
-    { artist:'?', title:'(titre à confirmer)', youtubeUrl:'https://youtu.be/O1oD27BcDo8?si=qzWDf-XtX6e2PtOi' }
+    { artist:'Willie Colón', title:'Set Fire To Me', youtubeUrl:'https://youtu.be/5l523eAC8xs?si=nA8IsmlgMdnCvhHi' },
+    { artist:'Bobby Blue Bland', title:"Ain't No Love In The Heart Of The City", youtubeUrl:'https://youtu.be/WcF8Aos4XDA?si=EB8GO63B0lX8Wi51' },
+    { artist:'DJ Preach', title:'Llexus', youtubeUrl:'https://youtu.be/DaGJvtGZ9Ns?si=94ADiUO6hkyp53d9' },
+    { artist:'António Variações', title:'Canção Do Engate', youtubeUrl:'https://youtu.be/bzhLamrxacE?si=k3xyOUmvgLRP5_b4' },
+    { artist:'Jeff Mills', title:'Berlin (Mills Mix)', youtubeUrl:'https://youtu.be/O1oD27BcDo8?si=qzWDf-XtX6e2PtOi' }
   ];
 
   function renderDotd(){
