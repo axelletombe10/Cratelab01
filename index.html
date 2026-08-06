@@ -366,14 +366,15 @@
   .audio-track-row .audio-timeline-wrap{padding-left:40px;}
   .audio-time{font-size:0.6rem;color:var(--ink-dim);min-width:30px;flex-shrink:0;}
   .audio-time:last-child{text-align:right;}
-  .timeline-slider{-webkit-appearance:none;appearance:none;flex:1;height:4px;border-radius:2px;background:var(--surface-2);cursor:pointer;min-width:60px;}
-  .timeline-slider::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--accent);cursor:pointer;margin-top:-4px;}
-  .timeline-slider::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:var(--accent);border:none;cursor:pointer;}
-  .timeline-slider::-moz-range-track{height:4px;border-radius:2px;background:var(--surface-2);}
+  .timeline-slider{-webkit-appearance:none;appearance:none;flex:1;height:5px;border-radius:3px;background:var(--surface-2);cursor:pointer;min-width:140px;}
+  .timeline-slider::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--accent);cursor:pointer;margin-top:-4.5px;}
+  .timeline-slider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--accent);border:none;cursor:pointer;}
+  .timeline-slider::-moz-range-track{height:5px;border-radius:3px;background:var(--surface-2);}
   .timeline-slider:disabled{opacity:.4;cursor:default;}
   .welcome-banner{font-family:'Newsreader',serif;font-style:italic;font-size:0.85rem;color:var(--ink-dim);margin-bottom:16px;}
 
   .dotd-card{max-width:280px;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:18px;}
+  .dotd-card .audio-timeline-wrap{padding-left:0;}
   .dotd-cover{width:100%;aspect-ratio:3/4;border-radius:4px;overflow:hidden;background:var(--bg) repeating-radial-gradient(circle at center, rgba(63,62,56,0.08) 0 2px, transparent 2px 6px);margin-bottom:14px;}
   .dotd-cover img{width:100%;height:100%;object-fit:cover;display:block;}
   .dotd-info .artist{font-size:0.7rem;letter-spacing:1px;text-transform:uppercase;color:var(--accent-2);}
@@ -381,19 +382,20 @@
   .dotd-empty{color:var(--ink-dim);font-size:0.85rem;padding:20px 0;text-align:center;border:1px dashed var(--line);border-radius:4px;}
 
   .selection-list{margin-top:8px;}
-  .selection-row{display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:14px;padding:14px 4px;border-top:1px solid var(--line);position:relative;}
+  .selection-row{display:grid;grid-template-columns:28px 1fr minmax(220px,260px);align-items:center;gap:14px;padding:14px 4px;border-top:1px solid var(--line);position:relative;}
   .selection-list .selection-row:last-child{border-bottom:1px solid var(--line);}
   .selection-row .sel-num{font-size:0.7rem;color:var(--ink-dim);}
   .selection-row .sel-info{min-width:0;}
   .selection-row .sel-title{font-weight:600;font-size:0.85rem;}
   .selection-row .sel-artist{font-size:0.78rem;}
   .selection-row .sel-genre{font-size:0.6rem;letter-spacing:0.5px;text-transform:uppercase;border:1px solid var(--accent-2);border-radius:20px;padding:3px 9px;color:var(--ink);white-space:nowrap;}
-  .selection-row .sel-controls{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;}
-  .selection-row .sel-controls .audio-timeline-wrap{width:110px;}
+  .selection-row .sel-controls{display:flex;flex-direction:column;align-items:stretch;gap:7px;}
+  .selection-row .sel-controls .ctrl-top{display:flex;align-items:center;justify-content:flex-end;gap:10px;}
+  .selection-row .sel-controls .vol-slider{margin-left:0;}
+  .selection-row .sel-controls .audio-timeline-wrap{width:100%;}
   @media (max-width:700px){
     .selection-row{grid-template-columns:22px 1fr;}
     .selection-row .sel-controls{grid-column:1 / -1;margin-top:8px;}
-    .selection-row .sel-controls .audio-timeline-wrap{width:auto;flex:1;}
   }
 
   @media (max-width:560px){
@@ -2624,9 +2626,11 @@
               <div class="sel-artist accent-serif">${escapeHtml(tr.artist)}</div>
             </div>
             <div class="sel-controls">
-              <button class="audio-play-btn" data-idx="${i+1}" ${yid?'':'disabled'}>▶</button>
+              <div class="ctrl-top">
+                <button class="audio-play-btn" data-idx="${i+1}" ${yid?'':'disabled'}>▶</button>
+                ${volumeSliderHtml('selection-vol-'+(i+1))}
+              </div>
               ${timelineSliderHtml('selection-time-'+(i+1))}
-              ${volumeSliderHtml('selection-vol-'+(i+1))}
             </div>
           </div>`;
         }).join('')}
